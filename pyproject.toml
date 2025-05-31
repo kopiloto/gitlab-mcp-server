@@ -5,3 +5,14 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+
+[project.optional-dependencies]
+linting = ["ruff", "mypy", "types-requests"]
+
+[dependency-groups]
+dev = [
+    "gitlab-mcp-server[linting]",
+]
+
+[tool.uv.sources]
+gitlab-mcp-server = { workspace = true }
