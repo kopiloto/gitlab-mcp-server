@@ -1,5 +1,5 @@
 import os
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any
 
 import gitlab
 from mcp.server.fastmcp import FastMCP
@@ -12,7 +12,7 @@ server = FastMCP(
 )
 
 # Global variable to store GitLab client
-_gl_client: Optional[gitlab.Gitlab] = None
+_gl_client: gitlab.Gitlab | None = None
 
 
 def get_gitlab_client() -> gitlab.Gitlab:
@@ -44,7 +44,7 @@ def list_projects(
     per_page: Annotated[
         int, Field(description="Number of projects to return (max 100)")
     ] = 20,
-) -> str | List[Dict[str, Any]]:
+) -> str | list[dict[str, Any]]:
     """
     List GitLab projects accessible to the authenticated user.
     """
@@ -62,7 +62,7 @@ def list_projects(
         )
 
         # Return simplified project data
-        project_data: List[Dict[str, Any]] = []
+        project_data: list[dict[str, Any]] = []
         for project in projects:
             project_data.append(
                 {
@@ -96,7 +96,7 @@ def list_groups(
     per_page: Annotated[
         int, Field(description="Number of groups to return (max 100)")
     ] = 20,
-) -> str | List[Dict[str, Any]]:
+) -> str | list[dict[str, Any]]:
     """
     List GitLab groups accessible to the authenticated user.
     """
@@ -113,7 +113,7 @@ def list_groups(
         )
 
         # Return simplified group data
-        group_data: List[Dict[str, Any]] = []
+        group_data: list[dict[str, Any]] = []
         for group in groups:
             group_data.append(
                 {
@@ -145,7 +145,7 @@ def list_group_projects(
     per_page: Annotated[
         int, Field(description="Number of projects to return (max 100)")
     ] = 20,
-) -> str | List[Dict[str, Any]]:
+) -> str | list[dict[str, Any]]:
     """
     List all projects within a specific GitLab group.
     """
@@ -165,7 +165,7 @@ def list_group_projects(
         )
 
         # Return simplified project data
-        project_data: List[Dict[str, Any]] = []
+        project_data: list[dict[str, Any]] = []
         for project in projects:
             project_data.append(
                 {
@@ -193,7 +193,7 @@ def list_group_projects(
 
 
 @server.tool()
-def get_user_info() -> str | Dict[str, Any]:
+def get_user_info() -> str | dict[str, Any]:
     """
     Get information about the authenticated user.
     """
@@ -237,7 +237,7 @@ def search_repositories(
     per_page: Annotated[
         int, Field(description="Number of repositories to return (max 100)")
     ] = 20,
-) -> str | List[Dict[str, Any]]:
+) -> str | list[dict[str, Any]]:
     """
     Search for GitLab repositories by name, description, or keywords.
     """
@@ -255,7 +255,7 @@ def search_repositories(
         )
 
         # Return simplified project data
-        project_data: List[Dict[str, Any]] = []
+        project_data: list[dict[str, Any]] = []
         for project in projects:
             project_data.append(
                 {
@@ -289,7 +289,7 @@ def get_repository_details(
         int | str,
         Field(description="The project ID or path (e.g., 'username/repo-name')"),
     ],
-) -> str | Dict[str, Any]:
+) -> str | dict[str, Any]:
     """
     Get detailed information about a specific GitLab repository.
     """
@@ -300,7 +300,7 @@ def get_repository_details(
         project = gl.projects.get(project_id)
 
         # Get additional details
-        languages: Dict[str, Any] = {}
+        languages: dict[str, Any] = {}
         try:
             lang_result = project.languages()
             if isinstance(lang_result, dict):
