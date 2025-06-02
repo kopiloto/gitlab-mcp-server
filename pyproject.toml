@@ -1,18 +1,36 @@
 [project]
 name = "gitlab-mcp-server"
-version = "0.1.0"
-description = "Add your description here"
+dynamic = ["version"]
+description = "GitLab MCP server"
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = []
+requires-python = ">=3.13"
+authors = [{ name = "Daniel Pastrana", email = "daniel@example.com" }]
+dependencies = ["python-gitlab>=4.0.0,<5.0.0", "mcp>=1.9.0,<2.0.0"]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.13",
+]
+keywords = ["gitlab", "mcp"]
 
-[project.optional-dependencies]
-linting = ["ruff", "mypy", "types-requests"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/gitlab_mcp_server/__init__.py"
 
 [dependency-groups]
 dev = [
-    "gitlab-mcp-server[linting]",
+    "mypy>=1.16.0",
+    "ruff>=0.11.12",
+    "types-requests>=2.32.0.20250515",
 ]
 
-[tool.uv.sources]
-gitlab-mcp-server = { workspace = true }
+[project.scripts]
+gitlab-mcp-server = "gitlab_mcp_server:main"
+
+[project.optional-dependencies]
+dev = ["ipython", "ipdb", "ipykernel", "mcp[cli]"]
+linting = ["ruff", "mypy", "types-requests"]
