@@ -1,4 +1,4 @@
-# GitLab MCP Server# gitlab-mcp-server
+# gitlab-mcp-server
 
 > **⚠️ Development Stage Notice**  
 > This project is currently in **development stage**. Features and APIs may change without notice. Use with caution in production environments.
