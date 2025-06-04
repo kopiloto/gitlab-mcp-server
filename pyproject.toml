@@ -1,5 +1,5 @@
 [project]
-name = "gitlab-mcp-server"
+name = "mcp-gitlab-server"
 dynamic = ["version"]
 description = "GitLab MCP server"
 readme = "README.md"
