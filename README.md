@@ -57,7 +57,7 @@ cd gitlab-mcp-server
 uv sync
 
 # Run in development mode
-uv run python -m gitlab_mcp_server
+uv run python -m mcp_gitlab_server
 ```
 
 ### Testing Configuration
@@ -71,7 +71,7 @@ For development and testing purposes, you can use a local wheel file installatio
     "GitLab": {
       "command": "uvx",
       "args": [
-        "--from", "/path/to/your/gitlab-mcp-server/dist/gitlab_mcp_server-0.1.0-py3-none-any.whl",
+        "--from", "/path/to/your/gitlab-mcp-server/dist/mcp_gitlab_server-0.1.0-py3-none-any.whl",
         "gitlab-mcp-server"
       ],
       "env": {
@@ -93,5 +93,5 @@ uv build
 # The wheel file will be in ./dist/ directory
 
 # For quick testing, verify the server starts:
-uv run python -m gitlab_mcp_server
+uv run python -m mcp_gitlab_server
 ```
