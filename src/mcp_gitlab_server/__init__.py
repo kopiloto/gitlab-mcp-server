@@ -2,6 +2,7 @@ import os
 from typing import Annotated, Any
 
 import gitlab
+import gitlab.exceptions
 from mcp.server.fastmcp import FastMCP
 from pydantic import Field
 
@@ -16,20 +17,29 @@ _gl_client: gitlab.Gitlab | None = None
 
 
 def get_gitlab_client() -> gitlab.Gitlab:
-    """Get or create GitLab client"""
+    """Get or create GitLab client with support for both Personal Access Token and OAuth2 authentication"""
     global _gl_client
 
-    token = os.getenv("GITLAB_TOKEN")
-    if not token:
+    # Try OAuth2 token first
+    oauth_token = os.getenv("GITLAB_OAUTH_TOKEN")
+    personal_token = os.getenv("GITLAB_TOKEN")
+
+    if not oauth_token and not personal_token:
         raise ValueError(
-            "You must set the GITLAB_TOKEN environment variable to use this tool"
+            "You must set either GITLAB_OAUTH_TOKEN or GITLAB_TOKEN environment variable to use this tool"
         )
 
     gitlab_url = os.getenv("GITLAB_URL", "https://gitlab.com")
 
     # Create new client if not exists or token changed
     if _gl_client is None:
-        _gl_client = gitlab.Gitlab(gitlab_url, private_token=token)
+        if oauth_token:
+            # Use OAuth2 token authentication
+            _gl_client = gitlab.Gitlab(gitlab_url, oauth_token=oauth_token)
+        else:
+            # Use personal access token authentication
+            _gl_client = gitlab.Gitlab(gitlab_url, private_token=personal_token)
+
         _gl_client.auth()
 
     return _gl_client
@@ -81,7 +91,7 @@ def list_projects(
 
         return project_data
     except gitlab.exceptions.GitlabAuthenticationError:
-        return "GitLab authentication failed. Please check your GITLAB_TOKEN."
+        return "GitLab authentication failed. Please check your GITLAB_TOKEN or GITLAB_OAUTH_TOKEN."
     except ValueError as e:
         return str(e)
     except Exception as e:
@@ -132,7 +142,7 @@ def list_groups(
 
         return group_data
     except gitlab.exceptions.GitlabAuthenticationError:
-        return "GitLab authentication failed. Please check your GITLAB_TOKEN."
+        return "GitLab authentication failed. Please check your GITLAB_TOKEN or GITLAB_OAUTH_TOKEN."
     except ValueError as e:
         return str(e)
     except Exception as e:
@@ -187,7 +197,7 @@ def list_group_projects(
         if "not found" in str(e).lower() or "access denied" in str(e).lower():
             return f"Group not found or access denied: {str(e)}"
         elif "authentication" in str(e).lower():
-            return "GitLab authentication failed. Please check your GITLAB_TOKEN."
+            return "GitLab authentication failed. Please check your GITLAB_TOKEN or GITLAB_OAUTH_TOKEN."
         else:
             return f"GitLab connection error: {str(e)}"
 
@@ -219,7 +229,7 @@ def get_user_info() -> str | dict[str, Any]:
             "public_email": getattr(user, "public_email", None),
         }
     except gitlab.exceptions.GitlabAuthenticationError:
-        return "GitLab authentication failed. Please check your GITLAB_TOKEN."
+        return "GitLab authentication failed. Please check your GITLAB_TOKEN or GITLAB_OAUTH_TOKEN."
     except ValueError as e:
         return str(e)
     except Exception as e:
@@ -276,7 +286,7 @@ def search_repositories(
 
         return project_data
     except gitlab.exceptions.GitlabAuthenticationError:
-        return "GitLab authentication failed. Please check your GITLAB_TOKEN."
+        return "GitLab authentication failed. Please check your GITLAB_TOKEN or GITLAB_OAUTH_TOKEN."
     except ValueError as e:
         return str(e)
     except Exception as e:
@@ -369,7 +379,7 @@ def get_repository_details(
         if "not found" in str(e).lower() or "access denied" in str(e).lower():
             return f"Repository not found or access denied: {str(e)}"
         elif "authentication" in str(e).lower():
-            return "GitLab authentication failed. Please check your GITLAB_TOKEN."
+            return "GitLab authentication failed. Please check your GITLAB_TOKEN or GITLAB_OAUTH_TOKEN."
         else:
             return f"GitLab connection error: {str(e)}"
 

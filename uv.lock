@@ -160,55 +160,6 @@ wheels = [
 ]
 
 [[package]]
-name = "gitlab-mcp-server"
-source = { editable = "." }
-dependencies = [
-    { name = "mcp" },
-    { name = "python-gitlab" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "ipdb" },
-    { name = "ipykernel" },
-    { name = "ipython" },
-    { name = "mcp", extra = ["cli"] },
-]
-linting = [
-    { name = "mypy" },
-    { name = "ruff" },
-    { name = "types-requests" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "ruff" },
-    { name = "types-requests" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "ipdb", marker = "extra == 'dev'" },
-    { name = "ipykernel", marker = "extra == 'dev'" },
-    { name = "ipython", marker = "extra == 'dev'" },
-    { name = "mcp", specifier = ">=1.9.0,<2.0.0" },
-    { name = "mcp", extras = ["cli"], marker = "extra == 'dev'" },
-    { name = "mypy", marker = "extra == 'linting'" },
-    { name = "python-gitlab", specifier = ">=4.0.0,<5.0.0" },
-    { name = "ruff", marker = "extra == 'linting'" },
-    { name = "types-requests", marker = "extra == 'linting'" },
-]
-provides-extras = ["dev", "linting"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.16.0" },
-    { name = "ruff", specifier = ">=0.11.12" },
-    { name = "types-requests", specifier = ">=2.32.0.20250515" },
-]
-
-[[package]]
 name = "h11"
 version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -423,6 +374,55 @@ wheels = [
 cli = [
     { name = "python-dotenv" },
     { name = "typer" },
+]
+
+[[package]]
+name = "mcp-gitlab-server"
+source = { editable = "." }
+dependencies = [
+    { name = "mcp" },
+    { name = "python-gitlab" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "ipdb" },
+    { name = "ipykernel" },
+    { name = "ipython" },
+    { name = "mcp", extra = ["cli"] },
+]
+linting = [
+    { name = "mypy" },
+    { name = "ruff" },
+    { name = "types-requests" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "ruff" },
+    { name = "types-requests" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "ipdb", marker = "extra == 'dev'" },
+    { name = "ipykernel", marker = "extra == 'dev'" },
+    { name = "ipython", marker = "extra == 'dev'" },
+    { name = "mcp", specifier = ">=1.9.0,<2.0.0" },
+    { name = "mcp", extras = ["cli"], marker = "extra == 'dev'" },
+    { name = "mypy", marker = "extra == 'linting'" },
+    { name = "python-gitlab", specifier = ">=4.0.0,<5.0.0" },
+    { name = "ruff", marker = "extra == 'linting'" },
+    { name = "types-requests", marker = "extra == 'linting'" },
+]
+provides-extras = ["dev", "linting"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.16.0" },
+    { name = "ruff", specifier = ">=0.11.12" },
+    { name = "types-requests", specifier = ">=2.32.0.20250515" },
 ]
 
 [[package]]
