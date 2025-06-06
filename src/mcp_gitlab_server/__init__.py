@@ -6,7 +6,7 @@ import gitlab.exceptions
 from mcp.server.fastmcp import FastMCP
 from pydantic import Field
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 server = FastMCP(
     "GitLab MCP Server", dependencies=["python-gitlab"], version=__version__
