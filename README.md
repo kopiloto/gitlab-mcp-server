@@ -81,12 +81,87 @@ This MCP server supports two authentication methods:
 
 ## Tools
 
+### Repository & Project Management
 - **list_projects** - List GitLab projects accessible to the authenticated user (supports filtering by owned/starred and pagination)
 - **list_groups** - List GitLab groups accessible to the authenticated user
 - **list_group_projects** - List all projects within a specific GitLab group
 - **get_user_info** - Get information about the authenticated user
 - **search_repositories** - Search for GitLab repositories by name, description, or keywords
 - **get_repository_details** - Get detailed information about a specific repository
+
+### Code Access
+- **read_repository_code** - Read the complete code structure and content of a repository with filtering options
+- **read_repository_file** - Read the content of a specific file from a repository
+
+### Merge Request Analytics
+- **list_merge_requests** - List merge requests for a repository with filtering by state, ordering, and pagination
+- **get_merge_request_analytics** - Calculate comprehensive merge request lifetime statistics including average time from creation to merge
+
+### Repository Code Reading Features
+
+The MCP server provides powerful code reading capabilities:
+
+#### `read_repository_code`
+Reads the entire repository structure and file contents with advanced filtering:
+
+- **Selective Reading**: Include/exclude files using glob patterns (e.g., `*.py,*.js` or exclude `*.log,node_modules/*`)
+- **Size Limits**: Control maximum files to read and file size limits to prevent overwhelming responses
+- **Branch/Tag Support**: Read from any branch, tag, or commit SHA
+- **Directory Filtering**: Focus on specific directories within the repository
+- **Smart Filtering**: Automatically excludes common build artifacts, logs, and binary files
+
+**Example Usage:**
+- Read only Python files: `include_patterns: "*.py"`
+- Exclude tests: `exclude_patterns: "*test*,*spec*"`
+- Read specific directory: `path: "src/"`
+- Different branch: `ref: "develop"`
+
+#### `read_repository_file`
+Reads individual files from a repository:
+
+- **Single File Access**: Get content of specific files quickly
+- **Metadata Included**: File size, encoding, last commit info
+- **Binary Detection**: Safely handles binary files
+- **Flexible References**: Works with branches, tags, or commit SHAs
+
+**Limits & Safety:**
+- Default: Max 50 files, 100KB per file
+- Configurable limits to prevent timeouts
+- Automatic binary file detection
+- Graceful error handling for large repositories
+
+### Merge Request Analytics Features
+
+The MCP server provides comprehensive merge request analytics capabilities:
+
+#### `list_merge_requests`
+Lists merge requests with advanced filtering and sorting:
+
+- **State Filtering**: Filter by state (`opened`, `closed`, `merged`, `all`)
+- **Flexible Sorting**: Order by creation date, update date, or title
+- **Rich Metadata**: Includes author, assignees, reviewers, labels, and voting info
+- **Pagination Support**: Control number of results returned
+
+#### `get_merge_request_analytics`
+Calculates detailed merge request lifetime statistics:
+
+- **Lifetime Analysis**: Average, median, min/max time from creation to merge
+- **Statistical Distribution**: 25th, 75th, and 90th percentile analysis
+- **Time Period Control**: Analyze MRs from the last N days (default: 90 days)
+- **Detailed Breakdown**: Individual MR details with exact lifetime calculations
+- **Multiple Time Units**: Results provided in both hours and days
+
+**Example Questions You Can Answer:**
+- "What is the average lifetime of an MR in the acapulco repository?"
+- "How long do merge requests typically take to get merged?"
+- "What's the distribution of merge request lifetimes?"
+- "Which merge requests took the longest to merge?"
+
+**Analytics Output:**
+- Average, median, min, max merge times
+- Percentile analysis (25th, 75th, 90th)
+- Sample merge requests with individual lifetimes
+- Complete dataset for further analysis
 
 ## Development
 
